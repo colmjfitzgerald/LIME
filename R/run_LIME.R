@@ -216,7 +216,7 @@ for(iter in 1:length(itervec)){
         Lwr[which(names(obj$par)=="log_S50_f")] = log(1)
 
         ## Run optimizer
-        # opt <- tryCatch( nlminb( start=obj$par, objective=obj$fn, gradient=obj$gr, upper=Upr, lower=Lwr, control=list(trace=1, eval.max=1e4, iter.max=1e4, rel.tol=1e-10) ), error=function(e) NA)    
+        # opt <- tryCatch( nlminb( startpar=obj$par, objective=obj$fn, gradient=obj$gr, upper=Upr, lower=Lwr, control=list(trace=1, eval.max=1e4, iter.max=1e4, rel.tol=1e-10) ), error=function(e) NA)    
         # opt <- TMBhelper::fit_tmb(obj=obj, upper=Upr, lower=Lwr, newtonsteps=newtonsteps, getsd=FALSE)
         if(is.numeric(newtonsteps)) opt <- tryCatch(TMBhelper::fit_tmb(obj=obj, upper=Upr, lower=Lwr, newtonsteps=newtonsteps, getsd=FALSE), error=function(e) NA)
         if(is.numeric(newtonsteps)==FALSE) opt <- tryCatch(TMBhelper::fit_tmb(obj=obj, upper=Upr, lower=Lwr, loopnum=3, getsd=FALSE), error=function(e) NA)
@@ -239,7 +239,7 @@ for(iter in 1:length(itervec)){
               obj <- MakeADFun(data=TmbList[["Data"]], parameters=TmbList[["Parameters"]],
                             random=TmbList[["Random"]], map=TmbList[["Map"]], 
                             inner.control=list(maxit=1e3), hessian=FALSE, DLL="LIME")
-                opt <-  tryCatch(TMBhelper::fit_tmb(obj=obj, start= obj$env$last.par.best[-obj$env$random] + rnorm(length(obj$par),0,0.2), upper=Upr, lower=Lwr, newtonsteps=newtonsteps, getsd=FALSE), error=function(e) NA)
+                opt <-  tryCatch(TMBhelper::fit_tmb(obj=obj, startpar= obj$env$last.par.best[-obj$env$random] + rnorm(length(obj$par),0,0.2), upper=Upr, lower=Lwr, newtonsteps=newtonsteps, getsd=FALSE), error=function(e) NA)
                 jnll <- obj$report()$jnll
             }
             if(all(is.na(opt))==FALSE & is.na(jnll)==FALSE){
@@ -262,7 +262,7 @@ for(iter in 1:length(itervec)){
                 obj <- MakeADFun(data=TmbList[["Data"]], parameters=TmbList[["Parameters"]],
                             random=TmbList[["Random"]], map=TmbList[["Map"]], 
                             inner.control=list(maxit=1e3), hessian=FALSE, DLL="LIME")
-                opt <-  tryCatch(TMBhelper::fit_tmb(obj=obj, start= obj$env$last.par.best[-obj$env$random] + rnorm(length(obj$par),0,0.2), upper=Upr, lower=Lwr, newtonsteps=newtonsteps, getsd=FALSE), error=function(e) NA)
+                opt <-  tryCatch(TMBhelper::fit_tmb(obj=obj, startpar= obj$env$last.par.best[-obj$env$random] + rnorm(length(obj$par),0,0.2), upper=Upr, lower=Lwr, newtonsteps=newtonsteps, getsd=FALSE), error=function(e) NA)
                 jnll <- obj$report()$jnll
               }
             }
@@ -289,7 +289,6 @@ for(iter in 1:length(itervec)){
         if(all(is.na(opt_save))==FALSE)  df <- data.frame("gradient"=as.vector(opt_save$final_gradient), "parameter"=names(obj_save$par), "estimate"=opt_save$par, "transformed"=exp(opt_save$par))
 
         }
-
 
         ## Standard errors
         Report = tryCatch( obj_save$report(), error=function(x) NA)
