@@ -119,10 +119,10 @@ if(all(is.null(Inputs))){
 		scale_color_brewer(palette="Set1") +
 		ylab("Proportion") + xlab("Length bin (cm)")
 	if(plot_type=="density"){
-		p <- p + geom_histogram(aes(x=Length, y=..density.., color=Fleet, fill=Fleet), position="identity", binwidth=binwidth, alpha=0.6)
+		p <- p + geom_histogram(aes(x=Length, y=after_stat(density), color=Fleet, fill=Fleet), position="identity", binwidth=binwidth, alpha=0.6)
 	}
 	if(plot_type=="counts"){
-		p <- p + geom_histogram(aes(x=Length, y=..count.., color=Fleet, fill=Fleet), position="identity", binwidth=binwidth, alpha=0.6)
+		p <- p + geom_histogram(aes(x=Length, y=after_stat(count), color=Fleet, fill=Fleet), position="identity", binwidth=binwidth, alpha=0.6)
 	}
 	if("Month" %in% colnames(LF_df)){
 		p <- p + facet_wrap(Year2~factor(Month), dir="v")
@@ -130,7 +130,7 @@ if(all(is.null(Inputs))){
 	if("Month" %in% colnames(LF_df)==FALSE){
 		p <- p + facet_wrap(Year~., dir="v")
 	}
-	if(nf==1) p <- p + guides(color=FALSE, fill=FALSE)
+	if(nf==1) p <- p + guides(color="none", fill="none")
 }
 
 if(all(is.null(Report))==FALSE){
@@ -171,7 +171,7 @@ if(all(is.null(Report))==FALSE){
 				scale_color_brewer(palette="Set1")
 	}
   }
-if(nf==1) p <- p + guides(fill=FALSE)
+if(nf==1) p <- p + guides(fill="none")
 
 }
 p
